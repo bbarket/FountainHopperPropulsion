@@ -84,11 +84,9 @@ def getTotalFuel(massFlowFuelImperial,burnTime):
 
 # To find initial grain diameter we can use eqn 7.21 plugging in max time of burn and max diameter to solve for d_initial, DENSITY IS IN INCHES^3
 def getGrainSizing(outerDiameterGrainImperial,a0Coefficient,nCoefficient,burnTime,massFlowOxImperial,massFuelImperial,densityFuelImperial):
-    print(outerDiameterGrainImperial,a0Coefficient,nCoefficient,burnTime,massFlowOxImperial,massFuelImperial,densityFuelImperial)
     massFlowOxMetric = massFlowOxImperial * 0.453592
     outerDiameterGrainMetric = outerDiameterGrainImperial * .0254
     diameterInitialMetric = (outerDiameterGrainMetric ** (2*nCoefficient+1) - (2*nCoefficient+1)*2**(2*nCoefficient+1)*a0Coefficient*massFlowOxMetric**nCoefficient*burnTime / pi**nCoefficient)**(1/(2*nCoefficient+1))
-    print("Initial Port Diameter Metric",diameterInitialMetric)
     diameterInitialImperial = diameterInitialMetric/.0254
     #volumeFuelMetric = massFuelImperial*0.453592 / 924.5
     volumeFuelImperial = massFuelImperial/densityFuelImperial
@@ -117,7 +115,7 @@ n=.5
 #density of paraffin is in lb/in^3
 densityFuelImperial = 0.0334
 simOF = 7.5
-simAR = 4
+simAR = 6.8
 
 # Get Cf and C* from CEA
 
@@ -140,10 +138,12 @@ print("simC*",simCStar)
 print("--- Calculated Values and Targets ---")
 print("Thrust (lbf)",simThrust)
 print("Burn Time (s)",simBurnTime)
+print("Expansion Ratio",simAR)
+print("Exit Pressure",1/(1/simChamberPressure* ceaObject.get_PcOvPe(simChamberPressure,simOF, simAR))*6894.76/101325)
 print("Chamber Pressure (psia)",simChamberPressure)
 print("Throat Diameter (in)",2*simThroatRad)
 print("Grain Port Diameter (in)",simGrainPortDiameter)
 print("Grain Length (in)",simLengthGrain)
-print("Mass of Fuel (lb/s)",simTotalFuelImperial)
-print("Mass of Oxidizer (lb/s)",simTotalOxidizerImperial)
+print("Mass of Fuel (lb)",simTotalFuelImperial)
+print("Mass of Oxidizer (lb)",simTotalOxidizerImperial)
 print("Ratio of Grain OD / Grain Port Diameter",simOuterDiameterGrain/simGrainPortDiameter)
